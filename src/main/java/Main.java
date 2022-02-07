@@ -58,22 +58,18 @@ public class Main {
             System.err.println("Введен не верный аргумент");
             return;
         }
-        if (taskMap.size() == 0){
-            System.out.println("Список задач пуст");
-            return;
-        }
         Stream<Map.Entry<Integer, Task>> mapStream = taskMap.entrySet().stream();
         if (!all){
-            mapStream.filter(a->!a.getValue().isDone()).forEach(Main::printTasks);
+            mapStream.filter(a->!a.getValue().isDone()).forEach(Main::printTask);
         } else {
-            mapStream.forEach(Main::printTasks);
+            mapStream.forEach(Main::printTask);
         }
     }
 
-    private static void printTasks(Map.Entry<Integer, Task> entry){
-        System.out.printf("%d. [%s] %s", entry.getKey(),
+    private static void printTask(Map.Entry<Integer, Task> entry){
+        System.out.printf("%d. [%s] %s\n", entry.getKey(),
                 entry.getValue().isDone() ? "X" : " ",
-                entry.getValue().getDescription() + "\n");
+                entry.getValue().getDescription());
     }
 
     private static void search(Scanner scanner){
@@ -83,7 +79,7 @@ public class Main {
             return;
         }
         Stream<Map.Entry<Integer, Task>> mapStream = taskMap.entrySet().stream();
-        mapStream.filter(a -> a.getValue().getDescription().contains(search)).forEach(Main::printTasks);
+        mapStream.filter(a -> a.getValue().getDescription().contains(search)).forEach(Main::printTask);
     }
 
     private static void toggle(Scanner scanner){
@@ -92,13 +88,13 @@ public class Main {
         try {
             id = Integer.parseInt(toggleId);
         } catch (NumberFormatException exception){
-            printError(exception);
+            printError();
             return;
         }
         try {
             taskMap.get(id).setDone(!taskMap.get(id).isDone());
         } catch (NullPointerException exception){
-            printError(exception);
+            printError();
         }
     }
 
@@ -108,12 +104,12 @@ public class Main {
         try {
             id = Integer.parseInt(deleteId);
         } catch (NumberFormatException exception){
-            printError(exception);
+            printError();
             return;
         }
         if (taskMap.containsKey(id)) {
                 taskMap.remove(id);
-        } else printError(new NullPointerException());
+        } else printError();
     }
 
     private static void edit(Scanner scanner) {
@@ -123,7 +119,7 @@ public class Main {
         try {
             id = Integer.parseInt(editId);
         } catch (NumberFormatException exception) {
-            printError(exception);
+            printError();
             return;
         }
         if (editDescription.length() != 0) {
@@ -131,17 +127,15 @@ public class Main {
                 Task task = taskMap.get(id);
                 task.setDescription(editDescription);
                 taskMap.replace(id, task);
-            } else printError(new NullPointerException());
+            } else printError();
         } else {
             System.err.println("Введите корректное описание задачи");
         }
     }
 
-    private static void printError(Exception exception){
-        if (exception.getClass().getName().contains("NumberFormatException")){
+    private static void printError(){
             System.err.println("Не верный id");
-        } else if (exception.getClass().getName().contains("NullPointerException")){
-            System.err.println("Задачи с таким Id не существует");
-        }
+
+
     }
 }
