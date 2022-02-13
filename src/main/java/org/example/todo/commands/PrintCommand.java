@@ -1,16 +1,16 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.Task;
-import org.example.todo.TaskStorage;
+import org.example.todo.entities.Task;
+import org.example.todo.TaskStorageImpl;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
 @Slf4j
 public class PrintCommand extends BaseCommand{
-    public PrintCommand(TaskStorage taskStorage) {
-        super(taskStorage);
+    public PrintCommand(TaskStorageImpl taskStorageImpl) {
+        super(taskStorageImpl);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class PrintCommand extends BaseCommand{
             System.err.println("Введен не верный аргумент");
             return;
         }
-        Stream<Map.Entry<Integer, Task>> mapStream = taskStorage.getTaskMap().entrySet().stream();
+        Stream<Map.Entry<Integer, Task>> mapStream = taskStorageImpl.getTaskMap().entrySet().stream();
         if (!all){
             mapStream.filter(a->!a.getValue().isDone()).forEach(PrintCommand::printTask);
         } else {

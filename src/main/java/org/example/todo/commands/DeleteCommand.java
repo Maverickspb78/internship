@@ -1,14 +1,14 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.TaskStorage;
+import org.example.todo.TaskStorageImpl;
 import java.util.Scanner;
 
 @Slf4j
 public class DeleteCommand extends BaseCommand{
     PrintCommand printCommand;
-    protected DeleteCommand(TaskStorage taskStorage, PrintCommand printCommand) {
-        super(taskStorage);
+    protected DeleteCommand(TaskStorageImpl taskStorageImpl, PrintCommand printCommand) {
+        super(taskStorageImpl);
         this.printCommand = printCommand;
     }
 
@@ -29,8 +29,8 @@ public class DeleteCommand extends BaseCommand{
             printCommand.printError();
             return;
         }
-        if (taskStorage.getTaskMap().containsKey(id)) {
-            taskStorage.getTaskMap().remove(id);
+        if (taskStorageImpl.getTaskMap().containsKey(id)) {
+            taskStorageImpl.getTaskMap().remove(id);
         } else {
             log.error("Не существующая задача: {}", id);
             printCommand.printError();

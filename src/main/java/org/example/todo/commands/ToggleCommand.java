@@ -1,15 +1,15 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.TaskStorage;
+import org.example.todo.TaskStorageImpl;
 import java.util.Scanner;
 
 @Slf4j
 public class ToggleCommand extends BaseCommand{
 
     private PrintCommand printCommand;
-    protected ToggleCommand(TaskStorage taskStorage, PrintCommand printCommand) {
-        super(taskStorage);
+    protected ToggleCommand(TaskStorageImpl taskStorageImpl, PrintCommand printCommand) {
+        super(taskStorageImpl);
         this.printCommand=printCommand;
     }
 
@@ -32,7 +32,7 @@ public class ToggleCommand extends BaseCommand{
             return;
         }
         try {
-            taskStorage.getTaskMap().get(id).setDone(!taskStorage.getTaskMap().get(id).isDone());
+            taskStorageImpl.getTaskMap().get(id).setDone(!taskStorageImpl.getTaskMap().get(id).isDone());
         } catch (NullPointerException exception){
             log.error("Не существующая задача: {}", id);
             printCommand.printError();

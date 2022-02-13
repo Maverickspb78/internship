@@ -2,7 +2,7 @@ package org.example.todo.commands;
 
 import org.example.todo.Command;
 import org.example.todo.CommandStorage;
-import org.example.todo.TaskStorage;
+import org.example.todo.TaskStorageImpl;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,25 +11,27 @@ import java.util.Map;
 public class CommandStorageImpl implements CommandStorage {
 
     private final Map<String, Command> commandMap;
+    private final TaskStorageImpl taskStorageImpl = new TaskStorageImpl().getInstance();
+    private final PrintCommand printCommand = new PrintCommand(taskStorageImpl);
 
-    public CommandStorageImpl(TaskStorage taskStorage, PrintCommand printCommand) {
+    public CommandStorageImpl() {
         Map<String, Command> map = new HashMap<>();
-        Command command = new AddCommand(taskStorage);
+        Command command = new AddCommand(taskStorageImpl);
         map.put(command.getCommand(), command);
 
-        command = new PrintCommand(taskStorage);
+        command = new PrintCommand(taskStorageImpl);
         map.put(command.getCommand(), command);
 
-        command = new SearchCommand(taskStorage);
+        command = new SearchCommand(taskStorageImpl);
         map.put(command.getCommand(), command);
 
-        command = new ToggleCommand(taskStorage, printCommand);
+        command = new ToggleCommand(taskStorageImpl, printCommand);
         map.put(command.getCommand(), command);
 
-        command = new DeleteCommand(taskStorage, printCommand);
+        command = new DeleteCommand(taskStorageImpl, printCommand);
         map.put(command.getCommand(), command);
 
-        command = new EditCommand(taskStorage, printCommand);
+        command = new EditCommand(taskStorageImpl, printCommand);
         map.put(command.getCommand(), command);
 
         command = new QuitCommand();

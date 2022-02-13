@@ -2,17 +2,13 @@ package org.example.todo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.commands.CommandStorageImpl;
-import org.example.todo.commands.PrintCommand;
 import java.util.Scanner;
 
 
 @Slf4j
 public class Main {
-
     public static void main(String[] args) {
-        TaskStorage taskStorage = new TaskStorage();
-        PrintCommand printCommand = new PrintCommand(taskStorage);
-        CommandStorage commandStorage = new CommandStorageImpl(taskStorage, printCommand);
+        CommandStorage commandStorage = new CommandStorageImpl();
         final Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()){
             String command = scanner.next();

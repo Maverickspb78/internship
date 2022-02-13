@@ -1,15 +1,15 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.Task;
-import org.example.todo.TaskStorage;
+import org.example.todo.entities.Task;
+import org.example.todo.TaskStorageImpl;
 import java.util.Scanner;
 
 @Slf4j
 public class EditCommand extends BaseCommand{
     PrintCommand printCommand;
-    protected EditCommand(TaskStorage taskStorage, PrintCommand printCommand) {
-        super(taskStorage);
+    protected EditCommand(TaskStorageImpl taskStorageImpl, PrintCommand printCommand) {
+        super(taskStorageImpl);
         this.printCommand = printCommand;
     }
 
@@ -32,10 +32,10 @@ public class EditCommand extends BaseCommand{
             return;
         }
         if (editDescription.length() != 0) {
-            if (taskStorage.getTaskMap().containsKey(id)) {
-                Task task = taskStorage.getTaskMap().get(id);
+            if (taskStorageImpl.getTaskMap().containsKey(id)) {
+                Task task = taskStorageImpl.getTaskMap().get(id);
                 task.setDescription(editDescription);
-                taskStorage.getTaskMap().replace(id, task);
+                taskStorageImpl.getTaskMap().replace(id, task);
             } else {
                 log.error("Не существующая задача: {}", id);
                 printCommand.printError();
