@@ -6,9 +6,11 @@ import java.util.Scanner;
 
 @Slf4j
 public class QuitCommand implements Command {
+    public final String NAME = "quit";
+
     @Override
     public String getCommand() {
-        return "quit";
+        return NAME;
     }
 
     @Override

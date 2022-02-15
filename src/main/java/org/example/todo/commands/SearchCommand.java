@@ -2,7 +2,6 @@ package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.entities.Task;
-import org.example.todo.TaskStorageImpl;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -10,13 +9,11 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class SearchCommand extends BaseCommand{
-    protected SearchCommand(TaskStorageImpl taskStorageImpl) {
-        super(taskStorageImpl);
-    }
+    public final String NAME = "search";
 
     @Override
     public String getCommand() {
-        return "search";
+        return NAME;
     }
 
     @Override

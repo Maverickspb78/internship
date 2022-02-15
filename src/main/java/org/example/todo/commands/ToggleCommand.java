@@ -1,21 +1,15 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.TaskStorageImpl;
 import java.util.Scanner;
 
 @Slf4j
 public class ToggleCommand extends BaseCommand{
-
-    private PrintCommand printCommand;
-    protected ToggleCommand(TaskStorageImpl taskStorageImpl, PrintCommand printCommand) {
-        super(taskStorageImpl);
-        this.printCommand=printCommand;
-    }
+    public final String NAME = "toggle";
 
     @Override
     public String getCommand() {
-        return "toggle";
+        return NAME;
     }
 
     @Override
@@ -23,19 +17,10 @@ public class ToggleCommand extends BaseCommand{
 
         String toggleId = scanner.nextLine().trim();
         log.debug("command: toggle {}", toggleId);
-        int id;
-        try {
-            id = Integer.parseInt(toggleId);
-        } catch (NumberFormatException exception){
-            log.error("Не распарсить id: {}", toggleId);
-            printCommand.printError();
+        int id = taskStorageImpl.parseId(toggleId);
+        if (id == 0){
             return;
         }
-        try {
-            taskStorageImpl.getTaskMap().get(id).setDone(!taskStorageImpl.getTaskMap().get(id).isDone());
-        } catch (NullPointerException exception){
-            log.error("Не существующая задача: {}", id);
-            printCommand.printError();
-        }
+        taskStorageImpl.toggle(id);
     }
 }

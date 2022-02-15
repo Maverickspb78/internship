@@ -2,8 +2,6 @@ package org.example.todo.commands;
 
 import org.example.todo.Command;
 import org.example.todo.CommandStorage;
-import org.example.todo.TaskStorageImpl;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,27 +9,26 @@ import java.util.Map;
 public class CommandStorageImpl implements CommandStorage {
 
     private final Map<String, Command> commandMap;
-    private final TaskStorageImpl taskStorageImpl = new TaskStorageImpl().getInstance();
-    private final PrintCommand printCommand = new PrintCommand(taskStorageImpl);
+    private final PrintCommand printCommand = new PrintCommand();
 
     public CommandStorageImpl() {
         Map<String, Command> map = new HashMap<>();
-        Command command = new AddCommand(taskStorageImpl);
+        Command command = new AddCommand();
         map.put(command.getCommand(), command);
 
-        command = new PrintCommand(taskStorageImpl);
+        command = new PrintCommand();
         map.put(command.getCommand(), command);
 
-        command = new SearchCommand(taskStorageImpl);
+        command = new SearchCommand();
         map.put(command.getCommand(), command);
 
-        command = new ToggleCommand(taskStorageImpl, printCommand);
+        command = new ToggleCommand();
         map.put(command.getCommand(), command);
 
-        command = new DeleteCommand(taskStorageImpl, printCommand);
+        command = new DeleteCommand();
         map.put(command.getCommand(), command);
 
-        command = new EditCommand(taskStorageImpl, printCommand);
+        command = new EditCommand(printCommand);
         map.put(command.getCommand(), command);
 
         command = new QuitCommand();

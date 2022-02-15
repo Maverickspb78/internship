@@ -1,2 +1,2 @@
 Паттерн Singleton используется в классе TaskStorageImpl.
-Template Method используется в классе CommandStorageImpl.
+Strategy используется в классах команд.

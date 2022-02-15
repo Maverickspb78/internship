@@ -2,20 +2,17 @@ package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.entities.Task;
-import org.example.todo.TaskStorageImpl;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
 @Slf4j
 public class PrintCommand extends BaseCommand{
-    public PrintCommand(TaskStorageImpl taskStorageImpl) {
-        super(taskStorageImpl);
-    }
+    public final String NAME = "print";
 
     @Override
     public String getCommand() {
-        return "print";
+        return NAME;
     }
 
     @Override
@@ -45,7 +42,7 @@ public class PrintCommand extends BaseCommand{
                 entry.getValue().isDone() ? "X" : " ",
                 entry.getValue().getDescription());
     }
-    static void printError(){
-            System.err.println("Не верный id");
-    }
+
+
+
 }

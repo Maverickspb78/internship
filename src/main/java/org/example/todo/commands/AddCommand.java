@@ -1,22 +1,15 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.entities.Task;
-import org.example.todo.TaskStorageImpl;
-
 import java.util.Scanner;
 
 @Slf4j
 public class AddCommand extends BaseCommand {
 
-    private final String NAME = "add";
-
-    protected AddCommand(TaskStorageImpl taskStorageImpl) {
-        super(taskStorageImpl);
-    }
+    public final String NAME = "add";
 
     @Override
-    public String getCommand() { return "add"; }
+    public String getCommand() { return NAME; }
 
     @Override
     public void execution(Scanner scanner) {
@@ -26,7 +19,6 @@ public class AddCommand extends BaseCommand {
             System.err.println("Введите корректное описание задачи");
             return;
         }
-        taskStorageImpl.setCountId(taskStorageImpl.getCountId() + 1);
-        taskStorageImpl.getTaskMap().put(taskStorageImpl.getCountId(), new Task(task));
+        taskStorageImpl.add(task);
     }
 }
