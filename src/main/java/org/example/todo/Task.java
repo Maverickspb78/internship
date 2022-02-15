@@ -1,3 +1,5 @@
+package org.example.todo;
+
 import lombok.Data;
 
 @Data
