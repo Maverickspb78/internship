@@ -1,0 +1,2 @@
+Паттерн Singleton используется в классе TaskStorageImpl.
+Strategy используется в классах команд.

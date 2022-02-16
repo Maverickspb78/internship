@@ -1,14 +1,13 @@
 package org.example.todo.commands;
 
 import org.example.todo.Command;
-import org.example.todo.TaskStorage;
-
+import org.example.todo.TaskStorageImpl;
 
 public abstract class BaseCommand implements Command {
 
-    protected final TaskStorage taskStorage;
+    protected TaskStorageImpl taskStorageImpl;
 
-    protected BaseCommand(TaskStorage taskStorage) {
-        this.taskStorage = taskStorage;
+    protected BaseCommand() {
+        taskStorageImpl = TaskStorageImpl.getInstance();
     }
 }
