@@ -2,6 +2,8 @@ package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.Command;
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
 @Slf4j

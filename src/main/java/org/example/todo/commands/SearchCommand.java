@@ -1,7 +1,9 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.TaskStorageImpl;
 import org.example.todo.entities.Task;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -9,6 +11,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class SearchCommand extends BaseCommand{
+    private TaskStorageImpl taskStorageImpl;
     public final String NAME = "search";
 
     @Override

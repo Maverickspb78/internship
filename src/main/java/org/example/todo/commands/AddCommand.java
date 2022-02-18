@@ -1,10 +1,22 @@
 package org.example.todo.commands;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.TaskStorage;
+import org.example.todo.TaskStorageImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import java.util.Scanner;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class AddCommand extends BaseCommand {
+
+
+    private TaskStorage taskStorage;
 
     public final String NAME = "add";
 
@@ -13,12 +25,19 @@ public class AddCommand extends BaseCommand {
 
     @Override
     public void execution(Scanner scanner) {
+
         String task = scanner.nextLine().trim();
-        log.debug("command: add {}", task);
+        log.debug("User command: add {}", task);
         if (task.length() == 0){
             System.err.println("Введите корректное описание задачи");
             return;
         }
-        taskStorageImpl.add(task);
+        log.debug("TS before taskStorage.add(task) - {}", taskStorage);
+        taskStorage.add(task);
     }
+//    @Autowired
+//    public void setTaskStorageImpl(TaskStorage taskStorage) {
+//        this.taskStorage = taskStorage;
+//        log.debug("addCommand @Autowired TS {}", this.taskStorage);
+//    }
 }

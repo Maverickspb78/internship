@@ -1,10 +1,14 @@
 package org.example.todo.commands;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.TaskStorageImpl;
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
 @Slf4j
 public class EditCommand extends BaseCommand{
+    private TaskStorageImpl taskStorageImpl;
     public final String NAME = "edit";
 
     PrintCommand printCommand;

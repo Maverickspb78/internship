@@ -1,0 +1,12 @@
+logging:
+  file:
+    name: target/log.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    org.example.todo: DEBUG
+
+spring:
+  main:
+    web-application-type: none

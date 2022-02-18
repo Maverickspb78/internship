@@ -2,26 +2,21 @@ package org.example.todo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.entities.Task;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Component
 public class TaskStorageImpl implements TaskStorage{
 
-    private static TaskStorageImpl taskStorageImpl;
     private int countId = 0;
-    private Map<Integer, Task> taskMap = new HashMap<>();
-
-    public static TaskStorageImpl getInstance(){
-        if (taskStorageImpl == null){
-            taskStorageImpl = new TaskStorageImpl();
-        }
-        return taskStorageImpl;
-    }
+    private final Map<Integer, Task> taskMap = new HashMap<>();
 
     public int parseId(String idString){
         int id;
-        log.debug("command: delete: {}", idString);
+        log.debug("parseId: {}", idString);
         try {
             id = Integer.parseInt(idString);
         } catch (NumberFormatException exception){
@@ -35,11 +30,13 @@ public class TaskStorageImpl implements TaskStorage{
         System.err.println("Не верный id");
     }
 
+    @Override
     public void add(String task){
         countId++;
         taskMap.put(countId, new Task(task));
     }
 
+    @Override
     public void delete(int id){
         if (taskMap.containsKey(id)) {
             taskMap.remove(id);
@@ -49,6 +46,7 @@ public class TaskStorageImpl implements TaskStorage{
         }
     }
 
+    @Override
     public void edit(int id, String Description){
         if (taskMap.containsKey(id)) {
             Task task = taskMap.get(id);
@@ -60,6 +58,7 @@ public class TaskStorageImpl implements TaskStorage{
         }
     }
 
+    @Override
     public void toggle(int id) {
         try {
             taskMap.get(id).setDone(!taskMap.get(id).isDone());

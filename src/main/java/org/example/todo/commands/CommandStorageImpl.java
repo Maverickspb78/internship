@@ -1,11 +1,21 @@
 package org.example.todo.commands;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.todo.Command;
 import org.example.todo.CommandStorage;
+import org.example.todo.TaskStorage;
+import org.example.todo.TaskStorageImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class CommandStorageImpl implements CommandStorage {
 
     private final Map<String, Command> commandMap;
@@ -39,6 +49,7 @@ public class CommandStorageImpl implements CommandStorage {
 
     @Override
     public Command getCommand(String command) {
+        log.debug("CS: {}", commandMap. get("add"));
         return commandMap.get(command);
     }
 }
