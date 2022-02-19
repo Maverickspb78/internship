@@ -1,34 +1,23 @@
-package org.example.todo;
+package org.example.todo.storage;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.Utils.PrintError;
 import org.example.todo.entities.Task;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
-public class TaskStorageImpl implements TaskStorage{
+@RequiredArgsConstructor
+public class TaskStorageImpl implements TaskStorage {
 
+    private final PrintError printError;
     private int countId = 0;
     private final Map<Integer, Task> taskMap = new HashMap<>();
-
-    public int parseId(String idString){
-        int id;
-        log.debug("parseId: {}", idString);
-        try {
-            id = Integer.parseInt(idString);
-        } catch (NumberFormatException exception){
-            log.error("Не распарсить id: {}", idString, exception);
-            printError();
-            return 0;
-        } return id;
-    }
-
-    public void printError(){
-        System.err.println("Не верный id");
-    }
 
     @Override
     public void add(String task){
@@ -42,7 +31,7 @@ public class TaskStorageImpl implements TaskStorage{
             taskMap.remove(id);
         } else {
             log.error("Не существующая задача: {}", id);
-            printError();
+            printError.printError();
         }
     }
 
@@ -54,7 +43,7 @@ public class TaskStorageImpl implements TaskStorage{
             taskMap.replace(id, task);
         } else {
             log.error("Не существующая задача: {}", id);
-            printError();
+            printError.printError();
         }
     }
 
@@ -64,12 +53,13 @@ public class TaskStorageImpl implements TaskStorage{
             taskMap.get(id).setDone(!taskMap.get(id).isDone());
         } catch (NullPointerException exception){
             log.error("Не существующая задача: {}", id);
-            printError();
+            printError.printError();
         }
 
     }
 
-    public Map<Integer, Task> getTaskMap() {
-        return taskMap;
+    @Override
+    public Stream<Map.Entry<Integer, Task>> getStream() {
+        return taskMap.entrySet().stream();
     }
 }

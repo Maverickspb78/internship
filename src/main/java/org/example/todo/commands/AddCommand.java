@@ -2,22 +2,18 @@ package org.example.todo.commands;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.TaskStorage;
-import org.example.todo.TaskStorageImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.todo.commandInt.Command;
+import org.example.todo.storage.TaskStorage;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AddCommand extends BaseCommand {
+public class AddCommand implements Command {
 
-
-    private TaskStorage taskStorage;
-
+    private final TaskStorage taskStorage;
     public final String NAME = "add";
 
     @Override
@@ -35,9 +31,4 @@ public class AddCommand extends BaseCommand {
         log.debug("TS before taskStorage.add(task) - {}", taskStorage);
         taskStorage.add(task);
     }
-//    @Autowired
-//    public void setTaskStorageImpl(TaskStorage taskStorage) {
-//        this.taskStorage = taskStorage;
-//        log.debug("addCommand @Autowired TS {}", this.taskStorage);
-//    }
 }

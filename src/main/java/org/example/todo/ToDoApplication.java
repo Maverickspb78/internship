@@ -1,23 +1,20 @@
 package org.example.todo;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.commands.CommandStorageImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 
 import java.util.Scanner;
 
 @Slf4j
 @SpringBootApplication
+@RequiredArgsConstructor
 public class ToDoApplication implements CommandLineRunner {
 
-	@Autowired
-	CommandStorageImpl commandStorage;
+	private  final CommandStorageImpl commandStorage;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ToDoApplication.class, args);

@@ -1,17 +1,19 @@
 package org.example.todo.commands;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.TaskStorageImpl;
-import org.example.todo.entities.Task;
+import org.example.todo.commandInt.Command;
+import org.example.todo.storage.TaskStorage;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 @Slf4j
-public class SearchCommand extends BaseCommand{
-    private TaskStorageImpl taskStorageImpl;
+@Component
+@RequiredArgsConstructor
+public class SearchCommand implements Command {
+
+    private final TaskStorage taskStorage;
     public final String NAME = "search";
 
     @Override
@@ -28,7 +30,7 @@ public class SearchCommand extends BaseCommand{
             System.err.println("введите хотя бы один символ для поиска");
             return;
         }
-        Stream<Map.Entry<Integer, Task>> mapStream = taskStorageImpl.getTaskMap().entrySet().stream();
-        mapStream.filter(a -> a.getValue().getDescription().contains(search)).forEach(PrintCommand::printTask);
+
+        taskStorage.getStream().filter(a -> a.getValue().getDescription().contains(search)).forEach(PrintCommand::printTask);
     }
 }

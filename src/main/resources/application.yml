@@ -10,3 +10,4 @@ logging:
 spring:
   main:
     web-application-type: none
+    banner-mode: log

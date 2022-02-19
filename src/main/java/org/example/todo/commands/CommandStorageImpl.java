@@ -2,10 +2,8 @@ package org.example.todo.commands;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.Command;
-import org.example.todo.CommandStorage;
-import org.example.todo.TaskStorage;
-import org.example.todo.TaskStorageImpl;
+import org.example.todo.commandInt.Command;
+import org.example.todo.commandInt.CommandStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,34 +12,51 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class CommandStorageImpl implements CommandStorage {
 
+
     private final Map<String, Command> commandMap;
-    private final PrintCommand printCommand = new PrintCommand();
 
-    public CommandStorageImpl() {
+    private final Command addCommand;
+    private final Command printCommand;
+    private final Command searchCommand;
+    private final Command toggleCommand;
+    private final Command deleteCommand;
+    private final Command editCommand;
+    private final Command quitCommand;
+
+    @Autowired
+    public CommandStorageImpl(Command addCommand, Command printCommand, Command searchCommand,
+                              Command toggleCommand, Command deleteCommand, Command editCommand, Command quitCommand) {
+        this.addCommand = addCommand;
+        this.printCommand = printCommand;
+        this.searchCommand = searchCommand;
+        this.toggleCommand = toggleCommand;
+        this.deleteCommand = deleteCommand;
+        this.editCommand = editCommand;
+        this.quitCommand = quitCommand;
         Map<String, Command> map = new HashMap<>();
-        Command command = new AddCommand();
+        Command command = this.addCommand;
         map.put(command.getCommand(), command);
 
-        command = new PrintCommand();
+        command = printCommand;
         map.put(command.getCommand(), command);
 
-        command = new SearchCommand();
+        command = searchCommand;
         map.put(command.getCommand(), command);
 
-        command = new ToggleCommand();
+        command = toggleCommand;
         map.put(command.getCommand(), command);
 
-        command = new DeleteCommand();
+        command = deleteCommand;
         map.put(command.getCommand(), command);
 
-        command = new EditCommand(printCommand);
+        command = editCommand;
         map.put(command.getCommand(), command);
 
-        command = new QuitCommand();
+        command = quitCommand;
         map.put(command.getCommand(), command);
 
         this.commandMap = Collections.unmodifiableMap(map);

@@ -1,4 +1,4 @@
-package org.example.todo;
+package org.example.todo.commandInt;
 
 public interface CommandStorage {
 
