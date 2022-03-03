@@ -1,17 +1,22 @@
 package org.example.todo.commands;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.commandInt.Command;
+import org.example.todo.storage.TaskStorage;
+import org.example.todo.Utils.ParserId;
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
 @Slf4j
-public class EditCommand extends BaseCommand{
+@Component
+@RequiredArgsConstructor
+public class EditCommand implements Command {
+
+    private final TaskStorage taskStorage;
+    private final ParserId parserId;
     public final String NAME = "edit";
-
-    PrintCommand printCommand;
-    protected EditCommand(PrintCommand printCommand) {
-
-        this.printCommand = printCommand;
-    }
 
     @Override
     public String getCommand() {
@@ -23,12 +28,12 @@ public class EditCommand extends BaseCommand{
         String editId = scanner.next().trim();
         String editDescription = scanner.nextLine().trim();
         log.debug("command: edit {} {}",editId, editDescription);
-        int id = taskStorageImpl.parseId(editId);
+        int id = parserId.parseId(editId);
         if (id == 0){
             return;
         }
         if (editDescription.length() != 0) {
-            taskStorageImpl.edit(id, editDescription);
+            taskStorage.edit(id, editDescription);
         } else {
             log.debug("Пустое имя задачи");
             System.err.println("Введите корректное описание задачи");

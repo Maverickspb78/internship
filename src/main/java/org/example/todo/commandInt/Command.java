@@ -1,4 +1,4 @@
-package org.example.todo;
+package org.example.todo.commandInt;
 
 import java.util.Scanner;
 

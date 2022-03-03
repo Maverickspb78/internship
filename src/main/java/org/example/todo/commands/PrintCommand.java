@@ -1,13 +1,21 @@
 package org.example.todo.commands;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.commandInt.Command;
+import org.example.todo.storage.TaskStorage;
 import org.example.todo.entities.Task;
+import org.springframework.stereotype.Component;
+
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 @Slf4j
-public class PrintCommand extends BaseCommand{
+@Component
+@RequiredArgsConstructor
+public class PrintCommand implements Command {
+
+    private final TaskStorage taskStorage;
     public final String NAME = "print";
 
     @Override
@@ -25,11 +33,10 @@ public class PrintCommand extends BaseCommand{
             System.err.println("Введен не верный аргумент");
             return;
         }
-        Stream<Map.Entry<Integer, Task>> mapStream = taskStorageImpl.getTaskMap().entrySet().stream();
         if (!all){
-            mapStream.filter(a->!a.getValue().isDone()).forEach(PrintCommand::printTask);
+            taskStorage.getStream().filter(a->!a.getValue().isDone()).forEach(PrintCommand::printTask);
         } else {
-            mapStream.forEach(PrintCommand::printTask);
+            taskStorage.getStream().forEach(PrintCommand::printTask);
         }
     }
 
@@ -42,7 +49,4 @@ public class PrintCommand extends BaseCommand{
                 entry.getValue().isDone() ? "X" : " ",
                 entry.getValue().getDescription());
     }
-
-
-
 }
