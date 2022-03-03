@@ -16,8 +16,8 @@ public class TaskRestController {
     private final TaskStorage taskStorage;
 
     @GetMapping(path = "/list", produces = "application/json")
-    public List<Task> findAll() {
-        return taskStorage.getList();
+    public List<Task> findAll(@RequestParam("all") boolean all) {
+        return taskStorage.getList(all);
 
     }
 
@@ -32,14 +32,18 @@ public class TaskRestController {
         return taskStorage.edit(task);
     }
 
-    @PutMapping(path = "/toggle", produces = "application/json")
+    @PatchMapping(path = "/toggle", produces = "application/json")
     public void toggle(@Valid @RequestParam("id") Long id){
         taskStorage.toggle(id);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public void deleteById(@Valid @PathVariable("id") Long id){
         taskStorage.delete(id);
     }
 
+    @GetMapping(path = "/search", produces = "application/json")
+    public List<Task> search(@RequestParam("searchString") String searchString) {
+        return taskStorage.search(searchString);
+    }
 }

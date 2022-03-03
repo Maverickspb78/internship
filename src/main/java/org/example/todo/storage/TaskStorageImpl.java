@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -41,7 +42,11 @@ public class TaskStorageImpl implements TaskStorage {
 
     @Override
     public void toggle(Long id) {
-        findById(id).setDone(!findById(id).isDone());
+        try {
+            findById(id).setDone(!findById(id).isDone());
+        }catch (NullPointerException e){
+            System.err.println("wrong id: " + id);
+        }
         log.debug("toggle id={}", id);
     }
 
@@ -58,7 +63,15 @@ public class TaskStorageImpl implements TaskStorage {
     }
 
     @Override
-    public List<Task> getList() {
+    public List<Task> search(String searchString) {
+        return taskList.stream().filter(a->a.getDescription().contains(searchString)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Task> getList(boolean all) {
+        if (!all){
+            return taskList.stream().filter(a->!a.isDone()).collect(Collectors.toList());
+        }
         return taskList;
     }
 }
