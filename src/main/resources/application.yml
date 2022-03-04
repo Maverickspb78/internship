@@ -7,7 +7,3 @@ logging:
   level:
     org.example.todo: DEBUG
 
-spring:
-  main:
-    web-application-type: none
-    banner-mode: log

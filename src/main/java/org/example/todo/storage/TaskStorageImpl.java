@@ -2,64 +2,78 @@ package org.example.todo.storage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.todo.Utils.PrintError;
 import org.example.todo.entities.Task;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class TaskStorageImpl implements TaskStorage {
 
-    private final PrintError printError;
-    private int countId = 0;
-    private final Map<Integer, Task> taskMap = new HashMap<>();
+    private long countId = 0;
+    private final List<Task> taskList = new ArrayList<>();
 
     @Override
-    public void add(String task){
+    public void add(Task task){
         countId++;
-        taskMap.put(countId, new Task(task));
+        task.setId(countId);
+        log.debug("add {} ", task);
+        taskList.add(task);
     }
 
     @Override
-    public void delete(int id){
-        if (taskMap.containsKey(id)) {
-            taskMap.remove(id);
-        } else {
-            log.error("Не существующая задача: {}", id);
-            printError.printError();
-        }
+    public void delete(Long id) {
+        taskList.remove(findById(id));
+        log.debug("taskList.remove({})", id);
     }
 
     @Override
-    public void edit(int id, String Description){
-        if (taskMap.containsKey(id)) {
-            Task task = taskMap.get(id);
-            task.setDescription(Description);
-            taskMap.replace(id, task);
-        } else {
-            log.error("Не существующая задача: {}", id);
-            printError.printError();
-        }
+    public Task edit(Task task){
+        Task taskEdit = findById(task.getId());
+        log.debug("editTask {}, new task {}", taskEdit, task);
+        taskEdit.setDescription(task.getDescription());
+        return taskEdit;
     }
 
     @Override
-    public void toggle(int id) {
+    public void toggle(Long id) {
         try {
-            taskMap.get(id).setDone(!taskMap.get(id).isDone());
-        } catch (NullPointerException exception){
-            log.error("Не существующая задача: {}", id);
-            printError.printError();
+            findById(id).setDone(!findById(id).isDone());
+        }catch (NullPointerException e){
+            System.err.println("wrong id: " + id);
         }
+        log.debug("toggle id={}", id);
+    }
 
+    public Task findById(Long id){
+        Task taskR;
+        for (Task task : taskList){
+            if (Objects.equals(task.getId(), id)){
+                taskR = task;
+                log.debug("findById({})", id);
+                return taskR;
+            }
+        }
+        return null;
     }
 
     @Override
-    public Stream<Map.Entry<Integer, Task>> getStream() {
-        return taskMap.entrySet().stream();
+    public List<Task> getList(boolean all, String searchString) {
+        if (searchString != null) {
+            if (!all) {
+                return taskList.stream().filter(a -> !a.isDone()).filter(a -> a.getDescription().contains(searchString)).collect(Collectors.toList());
+            } else {
+                return taskList.stream().filter(a->a.getDescription().contains(searchString)).collect(Collectors.toList());
+            }
+        }
+        if (!all) {
+            return taskList.stream().filter(a -> !a.isDone()).collect(Collectors.toList());
+        }
+        return taskList;
     }
 }
