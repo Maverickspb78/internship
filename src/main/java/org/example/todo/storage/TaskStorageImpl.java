@@ -62,11 +62,6 @@ public class TaskStorageImpl implements TaskStorage {
         return null;
     }
 
-//    @Override
-//    public List<Task> search(String searchString) {
-//        return taskList.stream().filter(a->a.getDescription().contains(searchString)).collect(Collectors.toList());
-//    }
-
     @Override
     public List<Task> getList(boolean all, String searchString) {
         if (searchString != null) {
