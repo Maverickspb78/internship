@@ -8,6 +8,5 @@ public interface TaskStorage {
     Task edit(Task task);
     void toggle(Long id);
     void delete(Long id);
-    List<Task> getList(boolean all);
-    List<Task> search(String searchString);
+    List<Task> getList(boolean all, String searchString);
 }

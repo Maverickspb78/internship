@@ -16,8 +16,9 @@ public class TaskRestController {
     private final TaskStorage taskStorage;
 
     @GetMapping(path = "/list", produces = "application/json")
-    public List<Task> findAll(@RequestParam("all") boolean all) {
-        return taskStorage.getList(all);
+    public List<Task> findAll(@RequestParam(name = "all", required = false) boolean all,
+                              @RequestParam(name = "searchString", required = false) String searchString) {
+        return taskStorage.getList(all, searchString);
 
     }
 
@@ -42,8 +43,4 @@ public class TaskRestController {
         taskStorage.delete(id);
     }
 
-    @GetMapping(path = "/search", produces = "application/json")
-    public List<Task> search(@RequestParam("searchString") String searchString) {
-        return taskStorage.search(searchString);
-    }
 }
