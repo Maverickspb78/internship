@@ -7,3 +7,17 @@ logging:
   level:
     org.example.todo: DEBUG
 
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5432/todo
+    username: admin
+    password: 52669
+    driverClassName: org.postgresql.Driver
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
