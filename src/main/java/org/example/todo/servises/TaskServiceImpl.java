@@ -53,16 +53,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getList(boolean all, String searchString) {
-        if (searchString != null) {
-            if (!all) {
-                return taskRepository.findAll().stream().filter(a -> !a.isDone()).filter(a -> a.getDescription().contains(searchString)).collect(Collectors.toList());
-            } else {
-                return taskRepository.findAll().stream().filter(a->a.getDescription().contains(searchString)).collect(Collectors.toList());
-            }
-        }
         if (!all) {
-            return taskRepository.findAll().stream().filter(a -> !a.isDone()).collect(Collectors.toList());
+            return taskRepository.findAllByDoneFalseAndDescriptionContains(searchString);
+        } else {
+            return taskRepository.findAllByDescriptionContains(searchString);
         }
-        return taskRepository.findAll();
     }
 }
