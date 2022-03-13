@@ -4,35 +4,37 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.todo.entities.Task;
 import org.example.todo.repositories.TaskRepository;
+import org.example.todo.repositories.UserRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public void add(Task task){
+    public void add(Task task, Principal principal){
+        task.setUser(userRepository.findUserByUsername(principal.getName()));
         taskRepository.save(task);
         log.debug("add {} ", task);
     }
 
     @Override
-    public void delete(Long id) {
-        taskRepository.deleteById(id);
+    @Transactional
+    public void delete(Long id, Principal principal) {
+        taskRepository.deleteByIdAndUserEquals(id, userRepository.findUserByUsername(principal.getName()));
         log.debug("taskList.remove({})", id);
     }
 
     @Override
-    public Task edit(Task task){
-        Task taskEdit = taskRepository.findById(task.getId()).orElseThrow();
+    public Task edit(Task task, Principal principal){
+        Task taskEdit = findById(task, principal);
         log.debug("editTask {}, new task {}", taskEdit, task);
         taskEdit.setDescription(task.getDescription());
         taskRepository.save(task);
@@ -40,23 +42,30 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void toggle(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow();
+    public void toggle(Long id, Principal principal) {
+        Task task = findById(id, principal);
         task.setDone(!taskRepository.findById(id).orElseThrow().isDone());
         taskRepository.save(task);
         log.debug("toggle id={}", id);
     }
 
-    public Task findById(Long id){
-        return taskRepository.findById(id).orElseThrow();
+    public Task findById(Long id, Principal principal){
+        return taskRepository.findFirstByIdAndUserEquals(id,
+                userRepository.findUserByUsername(principal.getName())).orElseThrow();
+    }
+
+    public Task findById(Task task, Principal principal){
+        return taskRepository.findFirstByIdAndUserEquals(task.getId(),
+                userRepository.findUserByUsername(principal.getName())).orElseThrow();
     }
 
     @Override
-    public List<Task> getList(boolean all, String searchString) {
+    public List<Task> getList(boolean all, String searchString, Principal principal) {
         if (!all) {
-            return taskRepository.findAllByDoneFalseAndDescriptionContains(searchString);
+            return taskRepository.findAllByUserEqualsAndDoneFalseAndDescriptionContains(userRepository.findUserByUsername(principal.getName()),
+                    searchString);
         } else {
-            return taskRepository.findAllByDescriptionContains(searchString);
+            return taskRepository.findAllByUserEqualsAndDescriptionContains(userRepository.findUserByUsername(principal.getName()),searchString);
         }
     }
 }
