@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-user_id
+      author: Andrey
+
+      changes:
+        - addColumn:
+            tableName: task
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
