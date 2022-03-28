@@ -2,6 +2,7 @@ package org.example.todo.servises;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.todo.entities.Role;
 import org.example.todo.entities.User;
 import org.example.todo.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,10 +22,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
         user.setPassword("***");
         log.debug("save user {}", user);
+        return user;
     }
 }
