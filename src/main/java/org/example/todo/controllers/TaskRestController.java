@@ -41,8 +41,8 @@ public class TaskRestController {
 
     @PatchMapping(path = "/toggle", produces = "application/json")
     @PreAuthorize("hasAuthority('task:all')")
-    public void toggle(@Valid @RequestParam("id") Long id, Principal principal){
-        taskService.toggle(id, principal);
+    public Task toggle(@Valid @RequestParam("id") Long id, Principal principal){
+        return taskService.toggle(id, principal);
     }
 
     @DeleteMapping("/{id}")

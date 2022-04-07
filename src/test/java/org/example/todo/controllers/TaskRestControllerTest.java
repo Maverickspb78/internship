@@ -55,9 +55,30 @@ public class TaskRestControllerTest {
 
     @Test
     public void updateTask_Always(){
+        Task taskEdit = new Task();
+        taskEdit.setDescription("editedTask");
 
-        Task taskRes = taskRestController.updateTask(task, principal);
+        when(taskService.edit(taskEdit, principal)).thenReturn(taskEdit);
+        task = taskRestController.updateTask(taskEdit, principal);
 
+        assertEquals(task, taskEdit);
 
+        verify(taskService).edit(task, principal);
+        verifyNoMoreInteractions(taskService);
     }
+
+    @Test
+    public void toggle_Always(){
+        task.setId(1L);
+        when(taskService.toggle(anyLong(), any())).thenReturn(task);
+
+        Task taskToggle = taskRestController.toggle(task.getId(), principal);
+        taskToggle.setDone(!task.isDone());
+
+        assertTrue(taskToggle.isDone());
+
+        verify(taskService).toggle(task.getId(), principal);
+        verifyNoMoreInteractions(taskService);
+    }
+
 }
