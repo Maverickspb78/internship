@@ -1,20 +1,25 @@
-name: GitHub Actions Demo
-on: 
+
+name: Java CI with Github Actions
+
+on:
   push:
-    branches: 
-      - master
+    branches: [ master ]
+  pull_request:
+    branches:
+      - '*'
+
 jobs:
-  testing:
+  build:
+
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Print Hello Message
-        run: echo "Hello World from testing job"
-       
-       
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print Hallo Message
-        run: echo "Hello World from deploy job"
-    
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn clean verify

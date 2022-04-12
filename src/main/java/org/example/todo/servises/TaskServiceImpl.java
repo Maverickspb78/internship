@@ -19,10 +19,11 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
 
     @Override
-    public void add(Task task, Principal principal){
+    public Task add(Task task, Principal principal){
         task.setUser(userRepository.findUserByUsername(principal.getName()));
         taskRepository.save(task);
         log.debug("add {} ", task);
+        return task;
     }
 
     @Override
@@ -37,16 +38,17 @@ public class TaskServiceImpl implements TaskService {
         Task taskEdit = findById(task, principal);
         log.debug("editTask {}, new task {}", taskEdit, task);
         taskEdit.setDescription(task.getDescription());
-        taskRepository.save(task);
+        taskRepository.save(taskEdit);
         return taskEdit;
     }
 
     @Override
-    public void toggle(Long id, Principal principal) {
+    public Task toggle(Long id, Principal principal) {
         Task task = findById(id, principal);
-        task.setDone(!taskRepository.findById(id).orElseThrow().isDone());
+        task.setDone(!task.isDone());
         taskRepository.save(task);
         log.debug("toggle id={}", id);
+        return task;
     }
 
     public Task findById(Long id, Principal principal){
